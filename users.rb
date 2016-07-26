@@ -1,36 +1,40 @@
 
 require_relative 'questiondatabase.rb'
 require_relative 'questions.rb'
+require_relative 'modelbase'
 
-class User
+class User < ModelBase
   attr_accessor :fname, :lname
-  attr_reader :id
+  attr_reader :id, :table
 
   def initialize(options)
     @id = options['id']
     @fname = options['fname']
     @lname = options['lname']
+    super('users')
+
   end
 
-  def self.all
-    people = QuestionsDatabase.instance.execute("SELECT * FROM users")
-    people.map {|person| User.new(person)}
-  end
+  # def self.all
+  #   people = QuestionsDatabase.instance.execute("SELECT * FROM users")
+  #   people.map {|person| User.new(person)}
+  # end
 
   # include DBMethods
 
-  def self.find_by_id(id)
-    user = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        users
-      WHERE
-        id = ?
-      SQL
-      return nil unless user.length > 0
-      User.new(user.first)
-  end
+  # def self.find_by_id(id)
+  #   user = QuestionsDatabase.instance.execute(<<-SQL, id)
+  #     SELECT
+  #       *
+  #     FROM
+  #       users
+  #     WHERE
+  #       id = ?
+  #     SQL
+  #     return nil unless user.length > 0
+  #     User.new(user.first)
+  # end
+
 
   def self.find_by_name(fname, lname)
     hash = Hash.new

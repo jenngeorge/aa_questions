@@ -40,9 +40,9 @@ CREATE TABLE replies (
 
 );
 
-DROP TABLE IF EXISTS questions_likes;
+DROP TABLE IF EXISTS question_likes;
 
-CREATE TABLE questions_likes (
+CREATE TABLE question_likes (
   id INTEGER PRIMARY KEY,
   question_id INTEGER,
   user_id INTEGER,
@@ -56,7 +56,9 @@ INSERT INTO
 
 VALUES
 ('Jenn', 'George'),
-('Joel', 'Mangin');
+('Joel', 'Mangin'),
+('App', 'Academy'),
+('Octo', 'Cat');
 
 INSERT INTO
 questions(title, body, user_id)
@@ -66,4 +68,22 @@ VALUES
 INSERT INTO
 replies(body, question_id, user_id, parent_id)
 VALUES
-  ('ok', (SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT user_id FROM questions WHERE title='how does SQL work?'), (SELECT id FROM questions WHERE title= 'how does SQL work?'));
+  ('ok', (SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT user_id FROM questions WHERE title='how does SQL work?'), null),
+  ('ok', (SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT user_id FROM questions WHERE title='how does SQL work?'), 1),
+  ('ok', (SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT user_id FROM questions WHERE title='how does SQL work?'), 1);
+
+
+
+INSERT INTO
+question_likes(question_id, user_id)
+VALUES
+((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT user_id FROM questions WHERE title='how does SQL work?')),
+((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT id FROM users WHERE fname='App')),
+((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT id FROM users WHERE fname='Octo'));
+
+INSERT INTO
+question_follows(question_id, user_id)
+VALUES
+((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT user_id FROM questions WHERE title='how does SQL work?')),
+((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT id FROM users WHERE fname='App')),
+((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT id FROM users WHERE fname='Octo'));

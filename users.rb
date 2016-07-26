@@ -1,5 +1,6 @@
 
 require_relative 'questiondatabase.rb'
+require_relative 'questions.rb'
 
 class User
   attr_accessor :fname, :lname
@@ -47,4 +48,19 @@ class User
       User.new(person.first)
   end
 
+  def authored_questions
+    Question.find_by_author_id(self.id)
+  end
+
+  def authored_replies
+    Reply.find_by_user_id(self.id)
+  end
+
+  def followed_questions
+    QuestionFollow.followed_questions_for_user_id(self.id)
+  end
+
+  def liked_questions
+    QuestionLike.liked_questions_for_user_id(self.id)
+  end
 end

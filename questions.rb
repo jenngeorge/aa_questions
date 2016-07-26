@@ -1,5 +1,5 @@
 require_relative 'questiondatabase.rb'
-
+require_relative 'reply'
 
 # module DBMethods
 #   def self.all(table)
@@ -50,6 +50,52 @@ class Question
       return nil unless question.length > 0
       Question.new(question.first)
   end
+
+  def self.find_by_author_id(author_id)
+    questions  = QuestionsDatabase.instance.execute(<<-SQL, author_id)
+      SELECT
+       *
+      FROM
+        questions
+      WHERE
+        user_id = ?
+      SQL
+    return nil unless questions.length  > 0
+    questions.map {|question| Question.new(question)}
+  end
   # include DBMethods
+
+  def author
+    id_to_check = self.user_id
+    name = QuestionsDatabase.instance.execute(<<-SQL, id_to_check)
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      id = ?
+    SQL
+    User.new(name.first)
+  end
+
+  def replies
+    Reply.find_by_question_id(self.id)
+  end
+
+  def followers
+    QuestionFollow.followers_for_question_id(self.id)
+  end
+
+  def self.most_followed(n)
+    QuestionFollow.most_followed_questions(n)
+  end
+
+  def likers
+    QuestionLike.likers_for_question_id(self.id)
+  end
+
+  def num_likes
+    QuestionLike.num_likes_for_question_id(self.id)
+  end
 
 end

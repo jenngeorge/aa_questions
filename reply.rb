@@ -94,12 +94,35 @@ class Reply
       FROM
         replies
       WHERE
-        parent_id = ? 
+        parent_id = ?
       SQL
     return nil unless replies.length  > 0
     replies.map {|reply| Reply.new(reply)}
   end
 
+  def save
+    @id.nil? ? self.insert : self.update
+  end
 
+  def insert
+    QuestionsDatabase.instance.execute(<<-SQL, @body, @parent_id, @question_id, @user_id)
+      INSERT INTO
+        replies (body, parent_id, question_id, user_id)
+      VALUES
+        (?, ?, ?, ?)
+    SQL
+    @id = QuestionsDatabase.instance.last_insert_row_id
+  end
+
+  def update
+    QuestionsDatabase.instance.execute(<<-SQL, @body, @parent_id, @question_id, @user_id, @id)
+      UPDATE
+        replies
+      SET
+        body = ?, parent_id = ?, question_id = ?, user_id = ?
+      WHERE
+        id = ?
+      SQL
+  end
 
 end

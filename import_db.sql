@@ -63,7 +63,9 @@ VALUES
 INSERT INTO
 questions(title, body, user_id)
 VALUES
-("how does SQL work?", "Like Magic", (SELECT id FROM users WHERE fname = 'Joel'));
+("how does SQL work?", "Like Magic", (SELECT id FROM users WHERE fname = 'Joel')),
+("how do we feel about SQL now?", "PERFECT", (SELECT id FROM users WHERE fname = 'Jenn')),
+("What about a nap?", "Yes!", (SELECT id FROM users WHERE fname = 'Octo'));
 
 INSERT INTO
 replies(body, question_id, user_id, parent_id)
@@ -79,7 +81,9 @@ question_likes(question_id, user_id)
 VALUES
 ((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT user_id FROM questions WHERE title='how does SQL work?')),
 ((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT id FROM users WHERE fname='App')),
-((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT id FROM users WHERE fname='Octo'));
+((SELECT id FROM questions WHERE title= 'how does SQL work?'), (SELECT id FROM users WHERE fname='Octo')),
+((SELECT id FROM questions WHERE title= 'how do we feel about SQL now?'), (SELECT id FROM users WHERE fname='Octo'));
+
 
 INSERT INTO
 question_follows(question_id, user_id)
